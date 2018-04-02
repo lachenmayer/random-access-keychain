@@ -48,7 +48,7 @@ module.exports = function randomAccessKeychain(service, account) {
           const size = req.offset + req.data.length
           const buffer = Buffer.alloc(size)
           req.data.copy(buffer, req.offset)
-          setPassword(req.data, req.callback.bind(req))
+          setPassword(req.data, cb)
         } else if (err) {
           req.callback(err)
         } else {
@@ -56,12 +56,25 @@ module.exports = function randomAccessKeychain(service, account) {
             const buffer = Buffer.alloc(req.offset + req.data.length)
             existing.copy(buffer, 0, 0, req.offset)
             req.data.copy(buffer, req.offset)
-            setPassword(buffer, req.callback.bind(req))
+            setPassword(buffer, cb)
           } else {
             req.data.copy(existing, req.offset)
-            setPassword(existing, req.callback.bind(req))
+            setPassword(existing, cb)
           }
         }
+        function cb(err) {
+          req.callback(err)
+        }
+      })
+    },
+    stat: function(req) {
+      // TODO: You can get much more info using `security find-generic-password`,
+      // but we'd have to figure out how to parse the response.
+      getPassword(function(err, password) {
+        const stat = {
+          size: password.length,
+        }
+        req.callback(err, stat)
       })
     },
   })

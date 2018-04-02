@@ -9,7 +9,6 @@ test('arguments are required', function(t) {
 
 test('write and read', function(t) {
   const storage = rak('random-access-keychain-test', 'happy-case')
-
   storage.write(0, Buffer.from('works'), function(err) {
     t.error(err, 'no error')
     storage.read(0, 5, function(err, buf) {
@@ -64,6 +63,18 @@ test('write past end', function(t) {
         t.same(buf, Buffer.from('worksucks'))
         t.end()
       })
+    })
+  })
+})
+
+test.only('stat', function(t) {
+  const storage = rak('random-access-keychain-test', 'stat')
+  storage.write(0, Buffer.from('works'), function(err) {
+    t.error(err, 'no error')
+    storage.stat(function(err, stat) {
+      t.error(err, 'no error')
+      t.same(stat, { size: 5 })
+      t.end()
     })
   })
 })
