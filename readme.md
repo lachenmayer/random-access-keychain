@@ -1,6 +1,6 @@
 # random-access-keychain
 
-A [random-access-storage](https://github.com/random-access-storage/random-access-storage) instance which stores its contents in the macOS keychain. This is useful if you want to store secret keys or passwords securely.
+A [random-access-storage](https://github.com/random-access-storage/random-access-storage) implementation which stores its contents in the macOS keychain. This is useful if you want to store secret keys or passwords securely.
 
 ## API
 
