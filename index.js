@@ -48,7 +48,7 @@ module.exports = function randomAccessKeychain(service, account) {
           const size = req.offset + req.data.length
           const buffer = Buffer.alloc(size)
           req.data.copy(buffer, req.offset)
-          setPassword(req.data, cb)
+          setPassword(buffer, cb)
         } else if (err) {
           req.callback(err)
         } else {

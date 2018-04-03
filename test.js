@@ -67,7 +67,7 @@ test('write past end', function(t) {
   })
 })
 
-test.only('stat', function(t) {
+test('stat', function(t) {
   const storage = rak('random-access-keychain-test', 'stat')
   storage.write(0, Buffer.from('works'), function(err) {
     t.error(err, 'no error')
