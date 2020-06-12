@@ -22,7 +22,7 @@ test('write and read', function(t) {
 test('read before write', function(t) {
   const storage = rak('random-access-keychain-test', 'does-not-exist')
   storage.read(0, 1, function(err, password) {
-    t.is(err.code, 'PasswordNotFound')
+    t.is(password, undefined)
     t.end()
   })
 })
