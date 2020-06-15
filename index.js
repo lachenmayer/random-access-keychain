@@ -1,5 +1,5 @@
 const randomAccessStorage = require('random-access-storage')
-const keychain = require('keychain')
+const keytar = require('keytar')
 
 module.exports = function randomAccessKeychain(service, account) {
   if (typeof service !== 'string') throw new Error('service is required')
@@ -8,27 +8,15 @@ module.exports = function randomAccessKeychain(service, account) {
   // We store the password in base64, because we can not store null bytes otherwise.
 
   function getPassword(cb) {
-    keychain.getPassword(
-      {
-        account: account,
-        service: service,
-      },
-      function(err, password) {
-        if (err) return cb(err)
-        cb(null, Buffer.from(password, 'base64'))
-      }
-    )
+    keytar.getPassword(service, account)
+      .then(password => cb(null, password === null ? null : Buffer.from(password, 'base64')))
+      .catch(err => cb(err))
   }
 
   function setPassword(buffer, cb) {
-    keychain.setPassword(
-      {
-        account: account,
-        service: service,
-        password: buffer.toString('base64'),
-      },
-      cb
-    )
+    keytar.setPassword(service, account, buffer.toString('base64'))
+      .then(result => cb(null, result))
+      .catch(err => cb(err))
   }
 
   return randomAccessStorage({
@@ -44,7 +32,7 @@ module.exports = function randomAccessKeychain(service, account) {
     },
     write: function(req) {
       getPassword(function(err, existing) {
-        if (err && err.code === 'PasswordNotFound') {
+        if (!err && existing == null) {
           const size = req.offset + req.data.length
           const buffer = Buffer.alloc(size)
           req.data.copy(buffer, req.offset)
