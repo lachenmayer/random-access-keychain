@@ -9,7 +9,7 @@ module.exports = function randomAccessKeychain(service, account) {
 
   function getPassword(cb) {
     keytar.getPassword(service, account)
-      .then(password => cb(null, Buffer.from(password, 'base64')))
+      .then(password => cb(null, password === null ? null : Buffer.from(password, 'base64')))
       .catch(err => cb(err))
   }
 
@@ -32,7 +32,7 @@ module.exports = function randomAccessKeychain(service, account) {
     },
     write: function(req) {
       getPassword(function(err, existing) {
-        if (existing === undefined) {
+        if (!err && existing == null) {
           const size = req.offset + req.data.length
           const buffer = Buffer.alloc(size)
           req.data.copy(buffer, req.offset)
