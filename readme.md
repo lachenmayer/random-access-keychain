@@ -1,6 +1,8 @@
 # random-access-keychain
 
-A [random-access-storage](https://github.com/random-access-storage/random-access-storage) implementation which stores its contents in the macOS keychain. This is useful if you want to store secret keys or passwords securely.
+A [random-access-storage](https://github.com/random-access-storage/random-access-storage) implementation which stores its contents in the system keychain. This is useful if you want to store secret keys or passwords securely.
+
+This module should work on macOS, Linux and Windows. Check the [keytar](http://atom.github.io/node-keytar/) documentation for details on required dependencies on Linux.
 
 ## API
 
